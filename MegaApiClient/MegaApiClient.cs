@@ -1262,7 +1262,7 @@
 
     private bool TryGetPartsFromUri(Uri uri, out string id, out byte[] decryptedKey, out bool isFolder)
     {
-      var uriRegex = new Regex(@"/(?<type>(file|folder))/(?<id>[^#]+)#(?<key>[^$/]+)");
+      var uriRegex = new Regex("/(?<type>(file|folder))/(?<id>[^#]+)(#|!)(?<key>[^$/]+)");
       var match = uriRegex.Match(uri.PathAndQuery + uri.Fragment);
       if (match.Success)
       {
@@ -1282,8 +1282,8 @@
 
     private bool TryGetPartsFromLegacyUri(Uri uri, out string id, out byte[] decryptedKey, out bool isFolder)
     {
-      var uriRegex = new Regex(@"#(?<type>F?)!(?<id>[^!]+)!(?<key>[^$!\?]+)");
-      var match = uriRegex.Match(uri.Fragment);
+      var uriRegex = new Regex(@"#?(?<type>F?)!(?<id>[^!]+)!(?<key>[^$!\?]+)");
+      var match = uriRegex.Match(uri.PathAndQuery + uri.Fragment);
       if (match.Success)
       {
         id = match.Groups["id"].Value;
