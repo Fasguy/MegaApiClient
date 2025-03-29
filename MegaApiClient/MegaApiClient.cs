@@ -1322,6 +1322,11 @@
       }
     }
 
+    private void SaveStream(Stream stream, Stream outputFile)
+    {
+      stream.CopyTo(outputFile, _options.BufferSize);
+    }
+
     #endregion
 
     #region AuthInfos

@@ -107,6 +107,28 @@ namespace CG.Web.MegaApiClient
       }, cancellationToken.GetValueOrDefault());
     }
 
+    public Task DownloadFileAsync(INode node, Stream outputFile, IProgress<double> progress = null, CancellationToken? cancellationToken = null)
+    {
+      return Task.Run(() =>
+      {
+        using (Stream stream = new ProgressionStream(Download(node, cancellationToken), progress, _options.ReportProgressChunkSize))
+        {
+          SaveStream(stream, outputFile);
+        }
+      }, cancellationToken.GetValueOrDefault());
+    }
+
+    public Task DownloadFileAsync(Uri uri, Stream outputFile, IProgress<double> progress = null, CancellationToken? cancellationToken = null)
+    {
+      return Task.Run(() =>
+      {
+        using (Stream stream = new ProgressionStream(Download(uri, cancellationToken), progress, _options.ReportProgressChunkSize))
+        {
+          SaveStream(stream, outputFile);
+        }
+      }, cancellationToken.GetValueOrDefault());
+    }
+
     public Task DownloadFileAsync(INode node, string outputFile, IProgress<double> progress = null, CancellationToken? cancellationToken = null)
     {
       return Task.Run(() =>

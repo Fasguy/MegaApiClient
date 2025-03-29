@@ -49,6 +49,8 @@ namespace CG.Web.MegaApiClient
 
     Task DownloadFileAsync(Uri uri, string outputFile, IProgress<double> progress = null, CancellationToken? cancellationToken = null);
 
+    Task DownloadFileAsync(Uri uri, Stream outputFile, IProgress<double> progress = null, CancellationToken? cancellationToken = null);
+
     Task<INode> UploadAsync(Stream stream, string name, INode parent, IProgress<double> progress = null, DateTime? modificationDate = null, CancellationToken? cancellationToken = null);
 
     Task<INode> UploadFileAsync(string filename, INode parent, IProgress<double> progress = null, CancellationToken? cancellationToken = null);
