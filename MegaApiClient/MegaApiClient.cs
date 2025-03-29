@@ -8,9 +8,7 @@
   using System.Security.Cryptography;
   using System.Text.RegularExpressions;
   using System.Threading;
-#if !NET40
   using System.Threading.Tasks;
-#endif
   using CG.Web.MegaApiClient.Cryptography;
   using Medo.Security.Cryptography;
   using Newtonsoft.Json;
@@ -1162,13 +1160,9 @@
 
     private void Wait(TimeSpan retryDelay)
     {
-#if NET40
-      Thread.Sleep(retryDelay);
-#else
       Task
         .Delay(retryDelay)
         .Wait();
-#endif
     }
 
     private Uri GenerateUrl(Dictionary<string, string> queryArguments)
