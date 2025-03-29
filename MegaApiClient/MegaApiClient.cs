@@ -1229,6 +1229,17 @@
       }
     }
 
+    public bool IsFolder(Uri uri)
+    {
+      if (!TryGetPartsFromUri(uri, out _, out _, out var isFolder)
+          && !TryGetPartsFromLegacyUri(uri, out _, out _, out isFolder))
+      {
+        throw new ArgumentException($"Invalid uri. Unable to extract Id and Key from the uri {uri}");
+      }
+
+      return isFolder;
+    }
+
     private void GetPartsFromUri(Uri uri, out string id, out byte[] iv, out byte[] metaMac, out byte[] key)
     {
       if (!TryGetPartsFromUri(uri, out id, out var decryptedKey, out var isFolder)
