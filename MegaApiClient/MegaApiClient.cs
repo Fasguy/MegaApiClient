@@ -1178,9 +1178,6 @@
         query["sid"] = _sessionId;
       }
 
-#if NETSTANDARD1_3
-      return new Uri(Microsoft.AspNetCore.WebUtilities.QueryHelpers.AddQueryString(s_baseApiUri.AbsoluteUri, query));
-#else
       var builder = new UriBuilder(s_baseApiUri);
       var arguments = "";
       foreach (var item in query)
@@ -1192,7 +1189,6 @@
 
       builder.Query = arguments;
       return builder.Uri;
-#endif
     }
 
     private void SaveStream(Stream stream, string outputFile)
