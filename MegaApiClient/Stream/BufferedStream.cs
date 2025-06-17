@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
 
 namespace CG.Web.MegaApiClient
 {
@@ -76,6 +77,8 @@ namespace CG.Web.MegaApiClient
 
     public void FillBuffer()
     {
+      using CancellationTokenSource cts = new();
+      
       while (true)
       {
         var startOfFreeSpace = _streamBufferDataStartIndex + _streamBufferDataCount;
@@ -86,7 +89,9 @@ namespace CG.Web.MegaApiClient
           break; // Buffer is full.
         }
 
-        var readCount = _innerStream.Read(_streamBuffer, startOfFreeSpace, availableSpaceInBuffer);
+        cts.TryReset();
+        cts.CancelAfter(TimeSpan.FromSeconds(120));
+        var readCount = _innerStream.ReadAsync(_streamBuffer, startOfFreeSpace, availableSpaceInBuffer, cts.Token).Result;
         if (readCount == 0)
         {
           break; // End of stream.
@@ -94,6 +99,8 @@ namespace CG.Web.MegaApiClient
 
         _streamBufferDataCount += readCount;
       }
+
+      cts.Token.ThrowIfCancellationRequested();
     }
 
     public override void Write(byte[] buffer, int offset, int count) => throw new NotImplementedException();
