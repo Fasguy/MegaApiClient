@@ -1,4 +1,7 @@
-﻿namespace CG.Web.MegaApiClient
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace CG.Web.MegaApiClient
 {
   using System;
   using System.IO;
@@ -72,16 +75,46 @@
         };
 
         var response = _httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead).Result;
-        if (!response.IsSuccessStatusCode
-            && response.StatusCode == HttpStatusCode.InternalServerError
-            && response.ReasonPhrase == "Server Too Busy")
+        if (RequestFailed(response, out var stream))
         {
-          return new MemoryStream(Encoding.UTF8.GetBytes(((long)ApiResultCode.RequestFailedRetry).ToString()));
+          return stream;
+        }
+
+        if (response.Headers.TryGetValues("X-Hashcash", out var values))
+        {
+          var value = values.First();
+          var output = Hashcash.GenerateToken(value);
+          
+          content.Headers.Add("X-Hashcash", output);
+
+          requestMessage = new HttpRequestMessage(HttpMethod.Post, url)
+          {
+            Content = content
+          };
+          response = _httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead).Result;
+          if (RequestFailed(response, out stream))
+          {
+            return stream;
+          }
         }
 
         response.EnsureSuccessStatusCode();
 
         return response.Content.ReadAsStreamAsync().Result;
+      }
+
+      bool RequestFailed(HttpResponseMessage response, out Stream stream)
+      {
+        if (!response.IsSuccessStatusCode
+            && response.StatusCode == HttpStatusCode.InternalServerError
+            && response.ReasonPhrase == "Server Too Busy")
+        {
+          stream = new MemoryStream(Encoding.UTF8.GetBytes(((long)ApiResultCode.RequestFailedRetry).ToString()));
+          return true;
+        }
+
+        stream = null;
+        return false;
       }
     }
 
