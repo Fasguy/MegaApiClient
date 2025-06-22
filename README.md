@@ -1,19 +1,9 @@
 MegaApiClient
 =============
 
-[![Build status](https://github.com/gpailler/MegaApiClient/actions/workflows/main.yml/badge.svg)](https://github.com/gpailler/MegaApiClient/actions/workflows/main.yml)
-[![Coverage Status](https://img.shields.io/codecov/c/github/gpailler/MegaApiClient)](https://codecov.io/gh/gpailler/MegaApiClient)
-[![Nuget version](https://img.shields.io/nuget/v/MegaApiClient)](https://www.nuget.org/packages/MegaApiClient/)
-[![Nuget downloads](https://img.shields.io/nuget/dt/MegaApiClient)](https://www.nuget.org/packages/MegaApiClient/)
-[![License](https://img.shields.io/github/license/gpailler/MegaApiClient)](https://github.com/gpailler/MegaApiClient/blob/master/LICENSE)
-
----
-
-> [!IMPORTANT]
-> **MegaApiClient is now in passive maintenance mode; I will no longer be actively maintaining it.**
-> 
-> This project began as a proof of concept to access the MegaUpload API several years ago, but I have never personally used it. Over the past years, I have dedicated a lot of energy to maintaining MegaApiClient for the community. However, I have reached a point where I lack the time and have different priorities. MegaApiClient will remain on GitHub and NuGet, and pull requests are welcome, but I do not plan to actively fix issues or add features.
-> [(more)](https://github.com/gpailler/MegaApiClient/issues/242)
+This is a fork of gpailler's [MegaApiClient](https://github.com/gpailler/MegaApiClient) library. \
+This fork is used for my [Madieter](https://github.com/Fasguy/Madieter) project, to provide a download surface. \
+Focus is mainly placed on the download side of things, so upload and management features are not being actively maintained.
 
 ---
 
